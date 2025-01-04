@@ -4,10 +4,15 @@
   "description": "Website para controlar servidores Pterodactyl",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "dev": "vercel dev",
+    "build": "vercel build",
+    "start": "vercel start"
   },
   "dependencies": {
     "express": "^4.17.1",
     "axios": "^0.21.1"
+  },
+  "engines": {
+    "node": "14.x"
   }
 }
