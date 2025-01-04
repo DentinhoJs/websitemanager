@@ -1,56 +1,86 @@
-<h1>Cloud System Manager</h1>
-<div id="status-container">
-  <h2>Status do Servidor: <span id="server-status">Desconhecido</span></h2>
-</div>
-<div id="controls">
-  <button onclick="controlServer('start')">Iniciar</button>
-  <button onclick="controlServer('stop')">Parar</button>
-  <button onclick="controlServer('restart')">Reiniciar</button>
-</div>
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cloud System Manager</title>
+  <link rel="stylesheet" href="./frontendstyles.css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+<body>
+  <header>
+    <div class="logo">
+      <h1>Cloud System Manager</h1>
+    </div>
+  </header>
 
-<script>
-  // Atualizar o status do servidor
-  function updateServerStatus() {
-    fetch('/api/status')
-      .then(response => response.json())
-      .then(data => {
-        const statusElement = document.getElementById('server-status');
-        if (data.status === 'running') {
-          statusElement.textContent = 'Online';
-          statusElement.style.color = 'green';
-        } else if (data.status === 'stopped') {
-          statusElement.textContent = 'Offline';
-          statusElement.style.color = 'red';
-        } else {
-          statusElement.textContent = 'Indefinido';
-          statusElement.style.color = 'gray';
-        }
+  <main>
+    <section class="status-container">
+      <h2>Status do Servidor: <span id="server-status">Carregando...</span></h2>
+    </section>
+
+    <section class="controls">
+      <button class="control-btn start" onclick="controlServer('start')">
+        <span class="material-icons">play_arrow</span> Iniciar
+      </button>
+      <button class="control-btn stop" onclick="controlServer('stop')">
+        <span class="material-icons">stop</span> Parar
+      </button>
+      <button class="control-btn restart" onclick="controlServer('restart')">
+        <span class="material-icons">refresh</span> Reiniciar
+      </button>
+    </section>
+
+    <footer>
+      <p>Feito por DentinhoJs. Exclusivo para clientes.</p>
+    </footer>
+  </main>
+
+  <script>
+    // Atualizar o status do servidor
+    function updateServerStatus() {
+      fetch('/api/status')
+        .then(response => response.json())
+        .then(data => {
+          const statusElement = document.getElementById('server-status');
+          if (data.status === 'running') {
+            statusElement.textContent = 'Online';
+            statusElement.style.color = 'green';
+          } else if (data.status === 'stopped') {
+            statusElement.textContent = 'Offline';
+            statusElement.style.color = 'red';
+          } else {
+            statusElement.textContent = 'Indefinido';
+            statusElement.style.color = 'gray';
+          }
+        })
+        .catch(error => {
+          console.error('Erro ao obter status:', error);
+        });
+    }
+
+    // Controle do servidor
+    function controlServer(action) {
+      fetch(`/api/control/${action}`, {
+        method: 'POST',
       })
-      .catch(error => {
-        console.error('Erro ao obter status:', error);
-      });
-  }
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            alert(`Ação ${action} executada com sucesso.`);
+            updateServerStatus();
+          } else {
+            alert(`Erro ao executar ação: ${data.error}`);
+          }
+        })
+        .catch(error => {
+          console.error('Erro ao executar ação:', error);
+        });
+    }
 
-  // Controle do servidor
-  function controlServer(action) {
-    fetch(`/api/control/${action}`, {
-      method: 'POST',
-    })
-      .then(response => response.json())
-      .then(data => {
-        if (data.success) {
-          alert(`Ação ${action} executada com sucesso.`);
-          updateServerStatus();
-        } else {
-          alert(`Erro ao executar ação: ${data.error}`);
-        }
-      })
-      .catch(error => {
-        console.error('Erro ao executar ação:', error);
-      });
-  }
-
-  // Atualizar status a cada 10 segundos
-  setInterval(updateServerStatus, 10000);
-  updateServerStatus();
-        </script>
+    // Atualizar status a cada 10 segundos
+    setInterval(updateServerStatus, 10000);
+    updateServerStatus();
+  </script>
+</body>
+</html>
