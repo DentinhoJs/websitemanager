@@ -1,165 +1,50 @@
-/* Resetando margens e padding */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+/* frontend/styles.css */
 
 body {
-    font-family: 'Arial', sans-serif;
-    background: linear-gradient(to right, #ff7e5f, #feb47b);
-    color: #fff;
-    line-height: 1.6;
-    text-align: center;
-}
-
-header {
-    background-color: #333;
-    padding: 20px;
-}
-
-header h1 {
-    font-size: 2.5em;
-    color: #fff;
-    text-transform: uppercase;
-}
-
-main {
-    padding: 50px 20px;
-}
-
-.control-buttons {
-    display: flex;
-    justify-content: center;
-    gap: 30px;
-    margin-bottom: 40px;
-}
-
-.btn {
-    padding: 15px 30px;
-    background-color: #333;
-    color: #fff;
-    border: none;
-    font-size: 1.2em;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
-}
-
-.btn:hover {
-    background-color: #feb47b;
-    transform: scale(1.1);
-}
-
-.status {
-    margin-top: 20px;
-    font-size: 1.5em;
-}
-
-#server-status {
-    font-weight: bold;
-}
-
-footer {
-    background-color: #333;
-    padding: 20px;
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-}
-
-footer p {
-    font-size: 1.2em;
-    color: #fff;
-}
-
-/* Efeitos para os ícones */
-.fas {
-    margin-right: 10px;
-}* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
   font-family: Arial, sans-serif;
-}
-
-body {
-  background-color: #f4f7fa;
-  color: #333;
+  background-color: #f4f4f4;
   display: flex;
-  flex-direction: column;
-  align-items: center;
   justify-content: center;
-  min-height: 100vh;
-  text-align: center;
-}
-
-header {
-  background-color: #2c3e50;
-  width: 100%;
-  padding: 20px 0;
-  color: white;
-}
-
-header h1 {
-  font-size: 2rem;
-  font-weight: bold;
+  align-items: center;
+  height: 100vh;
   margin: 0;
 }
 
-main {
+.container {
+  text-align: center;
+  background-color: #fff;
   padding: 20px;
-  width: 90%;
-  max-width: 600px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-.status-container {
-  background-color: #ecf0f1;
-  padding: 15px;
-  border-radius: 5px;
-  margin-bottom: 20px;
+h1 {
+  font-size: 24px;
+  color: #333;
 }
 
-#server-status {
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: #7f8c8d;
+.buttons {
+  margin-top: 20px;
 }
 
-.controls {
-  display: flex;
-  gap: 10px;
-}
-
-.control-btn {
-  background-color: #3498db;
+button {
+  background-color: #007bff;
   color: white;
   border: none;
+  padding: 10px 20px;
+  margin: 10px;
+  font-size: 16px;
   border-radius: 5px;
-  padding: 15px 20px;
-  font-size: 1.2rem;
   cursor: pointer;
-  width: 120px;
-  transition: background-color 0.3s, transform 0.3s;
+  transition: background-color 0.3s;
 }
 
-.control-btn:hover {
-  background-color: #2980b9;
-  transform: scale(1.1);
+button:hover {
+  background-color: #0056b3;
 }
 
-.control-btn:active {
-  background-color: #1d6fa5;
-}
-
-.material-icons {
-  vertical-align: middle;
-  margin-right: 8px;
-}
-
-footer {
+#status {
   margin-top: 20px;
-  font-size: 0.9rem;
-  color: #7f8c8d;
+  font-size: 18px;
+  color: #333;
 }
