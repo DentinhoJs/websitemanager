@@ -4,28 +4,44 @@ const PANEL_URL = 'https://painel.gratian.pro';  // URL do painel da Pterodactyl
 
 // Função para acionar a API e controlar o servidor
 function controlServer(action) {
-  fetch(`${PANEL_URL}/api/client/servers/${SERVER_ID}/${action}`, {
+  const url = `${PANEL_URL}/api/client/servers/${SERVER_ID}/power/${action}`;
+  fetch(url, {
     method: 'POST',
     headers: {
       'Authorization': `Bearer ${API_KEY}`,
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
     }
   })
   .then(response => response.json())
   .then(data => {
     if (data.error) {
-      alert('Erro ao executar a ação no servidor: ' + data.error);
+      alert('Erro: ' + data.error);
     } else {
-      alert('Ação realizada com sucesso: ' + action);
+      updateServerStatus(action);
     }
   })
   .catch(error => {
-    console.error('Erro na requisição:', error);
+    console.error('Erro:', error);
     alert('Erro ao tentar controlar o servidor.');
   });
 }
 
-// Funções para iniciar, parar e reiniciar o servidor
+// Função para atualizar o status do servidor
+function updateServerStatus(action) {
+  const status = document.getElementById('server-status');
+  if (action === 'start') {
+    status.textContent = 'Servidor Iniciado';
+    status.style.color = 'green';
+  } else if (action === 'stop') {
+    status.textContent = 'Servidor Parado';
+    status.style.color = 'red';
+  } else if (action === 'restart') {
+    status.textContent = 'Servidor Reiniciado';
+    status.style.color = 'blue';
+  }
+}
+
+// Funções para controlar o servidor
 function startServer() {
   controlServer('start');
 }
