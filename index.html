@@ -3,84 +3,20 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cloud System Manager</title>
+  <title>Pterodactyl Manager</title>
   <link rel="stylesheet" href="./frontend/styles.css">
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 <body>
-  <header>
-    <div class="logo">
-      <h1>Cloud System Manager</h1>
+  <div class="container">
+    <h1>Gerenciador de Servidores Pterodactyl</h1>
+    <div class="buttons">
+      <button id="start">Iniciar Servidor</button>
+      <button id="stop">Parar Servidor</button>
+      <button id="restart">Reiniciar Servidor</button>
     </div>
-  </header>
+    <div id="status"></div>
+  </div>
 
-  <main>
-    <section class="status-container">
-      <h2>Status do Servidor: <span id="server-status">Carregando...</span></h2>
-    </section>
-
-    <section class="controls">
-      <button class="control-btn start" onclick="controlServer('start')">
-        <span class="material-icons">play_arrow</span> Iniciar
-      </button>
-      <button class="control-btn stop" onclick="controlServer('stop')">
-        <span class="material-icons">stop</span> Parar
-      </button>
-      <button class="control-btn restart" onclick="controlServer('restart')">
-        <span class="material-icons">refresh</span> Reiniciar
-      </button>
-    </section>
-
-    <footer>
-      <p>Feito por DentinhoJs. Exclusivo para clientes.</p>
-    </footer>
-  </main>
-
-  <script>
-    // Atualizar o status do servidor
-    function updateServerStatus() {
-      fetch('/api/status')
-        .then(response => response.json())
-        .then(data => {
-          const statusElement = document.getElementById('server-status');
-          if (data.status === 'running') {
-            statusElement.textContent = 'Online';
-            statusElement.style.color = 'green';
-          } else if (data.status === 'stopped') {
-            statusElement.textContent = 'Offline';
-            statusElement.style.color = 'red';
-          } else {
-            statusElement.textContent = 'Indefinido';
-            statusElement.style.color = 'gray';
-          }
-        })
-        .catch(error => {
-          console.error('Erro ao obter status:', error);
-        });
-    }
-
-    // Controle do servidor
-    function controlServer(action) {
-      fetch(`/api/control/${action}`, {
-        method: 'POST',
-      })
-        .then(response => response.json())
-        .then(data => {
-          if (data.success) {
-            alert(`Ação ${action} executada com sucesso.`);
-            updateServerStatus();
-          } else {
-            alert(`Erro ao executar ação: ${data.error}`);
-          }
-        })
-        .catch(error => {
-          console.error('Erro ao executar ação:', error);
-        });
-    }
-
-    // Atualizar status a cada 10 segundos
-    setInterval(updateServerStatus, 10000);
-    updateServerStatus();
-  </script>
+  <script src="./frontend/script.js"></script>
 </body>
 </html>
