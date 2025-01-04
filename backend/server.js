@@ -7,7 +7,7 @@ const app = express();
 const port = 3000;
 
 // Configurações da API do Pterodactyl
-const API_KEY = 'ptlc_15WGTVq9BLHGQeoJNqqgJV1JHENNVB4IfkqkuPtpyhP';
+const API_KEY = 'ptlc_tC8sojvlAmC50G83yQKKnyRH7c0G0SQe72MWXY8678Z';
 const PANEL_URL = 'https://painel.gratian.pro';
 const SERVER_ID = '415f37c1-b47a-4172-bd35-ee9958853cee';
 
