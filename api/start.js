@@ -1,7 +1,7 @@
 const axios = require('axios');
 
 // A URL e o ID do servidor, conforme fornecido
-const PANEL_URL = 'https://painel.gratian.pro';
+const PANEL_URL = 'https://painel.gratian.pro/server/415f37c1';
 const SERVER_ID = '415f37c1-b47a-4172-bd35-ee9958853cee';
 const API_KEY = 'ptlc_tC8sojvlAmC50G83yQKKnyRH7c0G0SQe72MWXY8678Z';
 
