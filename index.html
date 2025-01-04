@@ -1,100 +1,56 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Cloud System Manager</title>
-    <link rel="stylesheet" href="./frontend/style.css">
-    <!-- Link para FontAwesome para ícones -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-</head>
-<body>
-    <!-- Cabeçalho -->
-    <header>
-        <div class="logo">
-            <h1>Cloud System Manager</h1>
-        </div>
-    </header>
+<h1>Cloud System Manager</h1>
+<div id="status-container">
+  <h2>Status do Servidor: <span id="server-status">Desconhecido</span></h2>
+</div>
+<div id="controls">
+  <button onclick="controlServer('start')">Iniciar</button>
+  <button onclick="controlServer('stop')">Parar</button>
+  <button onclick="controlServer('restart')">Reiniciar</button>
+</div>
 
-    <!-- Seção Principal -->
-    <main>
-        <section class="control-buttons">
-            <button class="btn" id="start-btn" onclick="startServer()">
-                <i class="fas fa-play"></i> Iniciar
-            </button>
-            <button class="btn" id="restart-btn" onclick="restartServer()">
-                <i class="fas fa-sync-alt"></i> Reiniciar
-            </button>
-            <button class="btn" id="stop-btn" onclick="stopServer()">
-                <i class="fas fa-stop"></i> Parar
-            </button>
-        </section>
-
-        <section class="status">
-            <h2>Status do Servidor:</h2>
-            <p id="server-status">Desconectado</p>
-        </section>
-    </main>
-
-    <!-- Rodapé -->
-    <footer>
-        <p>Feito por <strong>DentinhoJs</strong> Exclusivo para Clientes</p>
-    </footer>
-
-    <!-- Scripts -->
-    <script>
-        const API_KEY = 'ptlc_OikX8zibepC2BPMdnLMGxQMsgeMHwPfMS4ykrGxWG7N';
-        const SERVER_ID = '415f37c1-b47a-4172-bd35-ee9958853cee';
-        const PANEL_URL = 'https://painel.gratian.pro';
-
-        function controlServer(action) {
-            fetch(`${PANEL_URL}/api/client/servers/${SERVER_ID}/${action}`, {
-                method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${API_KEY}`,
-                    'Content-Type': 'application/json'
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.error) {
-                    alert('Erro: ' + data.error);
-                } else {
-                    updateServerStatus(action);
-                }
-            })
-            .catch(error => {
-                console.error('Erro:', error);
-                alert('Erro ao tentar controlar o servidor.');
-            });
+<script>
+  // Atualizar o status do servidor
+  function updateServerStatus() {
+    fetch('/api/status')
+      .then(response => response.json())
+      .then(data => {
+        const statusElement = document.getElementById('server-status');
+        if (data.status === 'running') {
+          statusElement.textContent = 'Online';
+          statusElement.style.color = 'green';
+        } else if (data.status === 'stopped') {
+          statusElement.textContent = 'Offline';
+          statusElement.style.color = 'red';
+        } else {
+          statusElement.textContent = 'Indefinido';
+          statusElement.style.color = 'gray';
         }
+      })
+      .catch(error => {
+        console.error('Erro ao obter status:', error);
+      });
+  }
 
-        function updateServerStatus(action) {
-            const status = document.getElementById('server-status');
-            if (action === 'start') {
-                status.textContent = 'Servidor Iniciado';
-                status.style.color = 'green';
-            } else if (action === 'stop') {
-                status.textContent = 'Servidor Parado';
-                status.style.color = 'red';
-            } else if (action === 'restart') {
-                status.textContent = 'Servidor Reiniciado';
-                status.style.color = 'blue';
-            }
+  // Controle do servidor
+  function controlServer(action) {
+    fetch(`/api/control/${action}`, {
+      method: 'POST',
+    })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          alert(`Ação ${action} executada com sucesso.`);
+          updateServerStatus();
+        } else {
+          alert(`Erro ao executar ação: ${data.error}`);
         }
+      })
+      .catch(error => {
+        console.error('Erro ao executar ação:', error);
+      });
+  }
 
-        function startServer() {
-            controlServer('start');
-        }
-
-        function stopServer() {
-            controlServer('stop');
-        }
-
-        function restartServer() {
-            controlServer('restart');
-        }
-    </script>
-</body>
-</html>
+  // Atualizar status a cada 10 segundos
+  setInterval(updateServerStatus, 10000);
+  updateServerStatus();
+        </script>
