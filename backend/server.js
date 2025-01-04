@@ -1,55 +1,67 @@
-const API_KEY = 'ptlc_OikX8zibepC2BPMdnLMGxQMsgeMHwPfMS4ykrGxWG7N';  // Sua API Key
-const SERVER_ID = '415f37c1-b47a-4172-bd35-ee9958853cee';  // Server ID completo
-const PANEL_URL = 'https://painel.gratian.pro';  // URL do painel da Pterodactyl
+const express = require('express');
+const fetch = require('node-fetch');
+const cors = require('cors');
 
-// Função para acionar a API e controlar o servidor
-function controlServer(action) {
-  const url = `${PANEL_URL}/api/client/servers/${SERVER_ID}/power/${action}`;
-  fetch(url, {
-    method: 'POST',
-    headers: {
-      'Authorization': `Bearer ${API_KEY}`,
-      'Content-Type': 'application/json',
-    }
-  })
-  .then(response => response.json())
-  .then(data => {
-    if (data.error) {
-      alert('Erro: ' + data.error);
+const app = express();
+const PORT = process.env.PORT || 3000;
+
+// Configurações da API
+const API_KEY = 'ptlc_OikX8zibepC2BPMdnLMGxQMsgeMHwPfMS4ykrGxWG7N';
+const SERVER_ID = '415f37c1-b47a-4172-bd35-ee9958853cee';
+const PANEL_URL = 'https://painel.gratian.pro';
+
+app.use(cors());
+app.use(express.json());
+
+// Rota para controlar o servidor
+app.post('/api/control/:action', async (req, res) => {
+  const action = req.params.action; // start, stop, restart
+  const url = `${PANEL_URL}/api/client/servers/${SERVER_ID}/power`;
+
+  try {
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${API_KEY}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ signal: action }),
+    });
+
+    if (response.ok) {
+      res.json({ success: true, action });
     } else {
-      updateServerStatus(action);
+      const error = await response.json();
+      res.status(400).json({ success: false, error });
     }
-  })
-  .catch(error => {
-    console.error('Erro:', error);
-    alert('Erro ao tentar controlar o servidor.');
-  });
-}
-
-// Função para atualizar o status do servidor
-function updateServerStatus(action) {
-  const status = document.getElementById('server-status');
-  if (action === 'start') {
-    status.textContent = 'Servidor Iniciado';
-    status.style.color = 'green';
-  } else if (action === 'stop') {
-    status.textContent = 'Servidor Parado';
-    status.style.color = 'red';
-  } else if (action === 'restart') {
-    status.textContent = 'Servidor Reiniciado';
-    status.style.color = 'blue';
+  } catch (error) {
+    res.status(500).json({ success: false, error: 'Erro ao conectar à API do Pterodactyl.' });
   }
-}
+});
 
-// Funções para controlar o servidor
-function startServer() {
-  controlServer('start');
-}
+// Rota para verificar o status do servidor
+app.get('/api/status', async (req, res) => {
+  const url = `${PANEL_URL}/api/client/servers/${SERVER_ID}`;
 
-function stopServer() {
-  controlServer('stop');
-}
+  try {
+    const response = await fetch(url, {
+      headers: {
+        'Authorization': `Bearer ${API_KEY}`,
+      },
+    });
 
-function restartServer() {
-  controlServer('restart');
-}
+    if (response.ok) {
+      const data = await response.json();
+      res.json({ status: data.attributes.current_state });
+    } else {
+      const error = await response.json();
+      res.status(400).json({ error });
+    }
+  } catch (error) {
+    res.status(500).json({ error: 'Erro ao conectar à API do Pterodactyl.' });
+  }
+});
+
+app.listen(PORT, () => {
+  console.log(`Servidor rodando na porta ${PORT}`);
+});
