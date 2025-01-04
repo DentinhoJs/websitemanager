@@ -1,82 +1,39 @@
-// backend/server.js
+const API_KEY = 'ptlc_OikX8zibepC2BPMdnLMGxQMsgeMHwPfMS4ykrGxWG7N';  // Sua API Key
+const SERVER_ID = '415f37c1-b47a-4172-bd35-ee9958853cee';  // Server ID completo
+const PANEL_URL = 'https://painel.gratian.pro';  // URL do painel da Pterodactyl
 
-const express = require('express');
-const axios = require('axios');
-const path = require('path'); // Importa o módulo path para trabalhar com caminhos
-const app = express();
-const port = 3000;
+// Função para acionar a API e controlar o servidor
+function controlServer(action) {
+  fetch(`${PANEL_URL}/api/client/servers/${SERVER_ID}/${action}`, {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${API_KEY}`,
+      'Content-Type': 'application/json'
+    }
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.error) {
+      alert('Erro ao executar a ação no servidor: ' + data.error);
+    } else {
+      alert('Ação realizada com sucesso: ' + action);
+    }
+  })
+  .catch(error => {
+    console.error('Erro na requisição:', error);
+    alert('Erro ao tentar controlar o servidor.');
+  });
+}
 
-// Configurações da API do Pterodactyl
-const API_KEY = 'ptlc_15WGTVq9BLHGQeoJNqqgJV1JHENNVB4IfkqkuPtpyhP';
-const PANEL_URL = 'https://painel.gratian.pro';
-const SERVER_ID = '415f37c1-b47a-4172-bd35-ee9958853cee';
+// Funções para iniciar, parar e reiniciar o servidor
+function startServer() {
+  controlServer('start');
+}
 
-// Serve arquivos estáticos da pasta frontend (HTML, CSS, JS)
-app.use(express.static(path.join(__dirname, '../frontend')));
+function stopServer() {
+  controlServer('stop');
+}
 
-// API - Rota para iniciar o servidor
-app.post('/start', async (req, res) => {
-  try {
-    const response = await axios.post(
-      `${PANEL_URL}/api/client/servers/${SERVER_ID}/power`,
-      { signal: 'start' },
-      {
-        headers: {
-          Authorization: `Bearer ${API_KEY}`,
-          'Content-Type': 'application/json',
-        },
-      }
-    );
-    res.json(response.data);
-  } catch (error) {
-    res.status(500).send(error.message);
-  }
-});
-
-// API - Rota para parar o servidor
-app.post('/stop', async (req, res) => {
-  try {
-    const response = await axios.post(
-      `${PANEL_URL}/api/client/servers/${SERVER_ID}/power`,
-      { signal: 'kill' },
-      {
-        headers: {
-          Authorization: `Bearer ${API_KEY}`,
-          'Content-Type': 'application/json',
-        },
-      }
-    );
-    res.json(response.data);
-  } catch (error) {
-    res.status(500).send(error.message);
-  }
-});
-
-// API - Rota para reiniciar o servidor
-app.post('/restart', async (req, res) => {
-  try {
-    const response = await axios.post(
-      `${PANEL_URL}/api/client/servers/${SERVER_ID}/power`,
-      { signal: 'restart' },
-      {
-        headers: {
-          Authorization: `Bearer ${API_KEY}`,
-          'Content-Type': 'application/json',
-        },
-      }
-    );
-    res.json(response.data);
-  } catch (error) {
-    res.status(500).send(error.message);
-  }
-});
-
-// Rota para servir o HTML (index.html)
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, '../frontend', 'index.html'));
-});
-
-// Inicia o servidor na porta 3000
-app.listen(port, () => {
-  console.log(`Servidor rodando na porta ${port}`);
-});
+function restartServer() {
+  controlServer('restart');
+}
