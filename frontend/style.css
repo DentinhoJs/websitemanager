@@ -1,8 +1,12 @@
-/* frontend/styles.css */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
 body {
-  font-family: Arial, sans-serif;
-  background-color: #f4f4f4;
+  font-family: 'Arial', sans-serif;
+  background-color: #f7f7f7;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -13,14 +17,17 @@ body {
 .container {
   text-align: center;
   background-color: #fff;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  padding: 40px;
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px;
 }
 
 h1 {
-  font-size: 24px;
+  font-size: 26px;
   color: #333;
+  margin-bottom: 20px;
 }
 
 .buttons {
@@ -31,20 +38,31 @@ button {
   background-color: #007bff;
   color: white;
   border: none;
-  padding: 10px 20px;
+  padding: 12px 25px;
   margin: 10px;
   font-size: 16px;
-  border-radius: 5px;
+  border-radius: 8px;
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 button:hover {
   background-color: #0056b3;
+  transform: scale(1.05);
 }
 
 #status {
   margin-top: 20px;
   font-size: 18px;
   color: #333;
+  font-weight: bold;
+  transition: color 0.3s ease;
+}
+
+#status.success {
+  color: green;
+}
+
+#status.error {
+  color: red;
 }
