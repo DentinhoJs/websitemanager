@@ -3,7 +3,7 @@ const axios = require('axios');
 // A URL e o ID do servidor, conforme fornecid
 const PANEL_URL = 'https://painel.gratian.pro';
 const SERVER_ID = '415f37c1-b47a-4172-bd35-ee9958853cee';
-const API_KEY = 'ptlc_tC8sojvlAmC50G83yQKKnyRH7c0G0SQe72MWXY8678Z';
+const API_KEY = 'ptlc_x5BFfaYtI09rmAN6DPWupqyMdNtmZQ7Hc6IbEzpuC0y';
 
 module.exports = async (req, res) => {
   try {
