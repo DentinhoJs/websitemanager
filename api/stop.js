@@ -1,7 +1,7 @@
 const axios = require('axios');
 
 // Substitua os valores abaixo pelos valores reais que você deseja usar
-const API_KEY = 'seu-api-key-aqui';
+const API_KEY = 'ptlc_x5BFfaYtI09rmAN6DPWupqyMdNtmZQ7Hc6IbEzpuC0y';
 const PANEL_URL = 'https://painel.gratian.pro';
 const SERVER_ID = '415f37c1-b47a-4172-bd35-ee9958853cee';
 
